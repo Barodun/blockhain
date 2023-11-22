@@ -7,6 +7,8 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 notion_service = NotionService()
 
+# asf
+
 
 @app.route('/invite', methods=['POST'])
 def invite():
