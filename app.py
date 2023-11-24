@@ -25,7 +25,11 @@ def generate():
     content = request.json['content']
     api_key = request.json.get('api_key')
     gpt_model = request.json.get('gpt_model')
-    res = gpt_generator.generate_text(prompt, content, api_key, gpt_model)
+    wp_url = request.json['wp_url']
+    post_id = request.json['post_id']
+    username = request.json.get('username')
+    app_pass = request.json.get('app_pass')
+    res = gpt_generator.generate_text(prompt, content, api_key, gpt_model, wp_url, post_id, username, app_pass)
     print(res)
     return res
 
