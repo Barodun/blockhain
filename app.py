@@ -30,9 +30,13 @@ def generate():
 
 @app.route('/', methods=['GET'])
 def default():
-    string = 'asfsafsaf'
-    string_len = int(len(string) / 3)
-    return str(string_len)
+    prompt = 'Translate this text to English. There is the text:'
+    content = 'There is the simple text to translate'
+    api_key = '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'
+    gpt_model = 'gpt-3.5-turbo'
+    res = gpt_generator.generate_text(prompt, content, api_key, gpt_model)
+    print(res)
+    return res
 
 if __name__ == '__main__':
     app.run()
