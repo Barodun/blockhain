@@ -43,7 +43,7 @@ class GptGenerator(object):
         except Exception as e:
             return str(e)
 
-    def generate_text(self, prompt, content, api_key, model, wp_url, post_id, username, app_pass, data):
+    def generate_text(self, prompt, content, api_key, model, wp_url, post_id, username, app_pass):
         openai.api_key = api_key
         text_for_gpt = prompt + content
         content_len = int(len(content) / 3)
@@ -65,5 +65,11 @@ class GptGenerator(object):
             # return response.choices[0].message['content']
         except Exception as e:
             print(str(e))
-            return content
+            return ['Error', str(e)]
+
+        data = {
+            'title': 'New Post Title',
+            'content': new_content,
+            'meta': { '_yoast_wpseo_metadesc': 'New Yoast meta desc' }
+        }
         return self._change_post_data(wp_url, post_id, username, app_pass, data)
