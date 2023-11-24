@@ -1,13 +1,25 @@
 import requests
 import openai
+from requests.auth import HTTPBasicAuth
 
-gptURL = "https://api.openai.com/v1/chat/completions"
+wpUrl = 'https://staging3.staging2.blockchainspost.com/wp-json/wp/v2/posts/'
 
 class GptGenerator(object):
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(GptGenerator, cls).__new__(cls)
         return cls.instance
+
+    def _change_post_data(self, wp_url, post_id, username, app_pass, data):
+        url = f'{wp_url}/wp-json/wp/v2/posts/{post_id}'
+        response = requests.post(url, auth=HTTPBasicAuth(username, app_pass), json=data)
+        if response.status_code == 200:
+            print("Post updated successfully")
+        else:
+            print("Failed to update post")
+            print("Status Code:", response.status_code)
+            print("Response:", response.text)
+        return response.json()
 
     def chat_with_gpt(self, prompt, content, api_key, model):
         openai.api_key = api_key
@@ -31,7 +43,7 @@ class GptGenerator(object):
         except Exception as e:
             return str(e)
 
-    def generate_text(self, prompt, content, api_key, model):
+    def generate_text(self, prompt, content, api_key, model, wp_url, post_id, username, app_pass, data):
         openai.api_key = api_key
         text_for_gpt = prompt + content
         content_len = int(len(content) / 3)
@@ -49,6 +61,9 @@ class GptGenerator(object):
                 presence_penalty=0.01,
                 stop=["<!--noindex-->"]
             )
-            return response.choices[0].message['content']
+            new_content = response.choices[0].message['content']
+            # return response.choices[0].message['content']
         except Exception as e:
-            return str(e)
+            print(str(e))
+            return content
+        return self._change_post_data(wp_url, post_id, username, app_pass, data)

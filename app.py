@@ -1,6 +1,7 @@
 from gpt_generator import GptGenerator
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from requests.auth import HTTPBasicAuth
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -30,13 +31,33 @@ def generate():
 
 @app.route('/', methods=['GET'])
 def default():
-    prompt = 'Translate this text to English. There is the text:'
-    content = 'There is the simple text to translate'
-    api_key = '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'
-    gpt_model = 'gpt-3.5-turbo'
-    res = gpt_generator.generate_text(prompt, content, api_key, gpt_model)
-    print(res)
-    return res
+    # prompt = 'Translate this text to English. There is the text:'
+    # content = 'There is the simple text to translate'
+    # api_key = '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'
+    # gpt_model = 'gpt-3.5-turbo'
+    # res = gpt_generator.generate_text(prompt, content, api_key, gpt_model)
+    # print(res)
+    # return res
+    # data = {
+    #     'title': 'New Post Title',
+    #     'content': 'This is the updated content of the post.'
+    # }
+    # post_id = '565'
+    # username = 'generator@pansevich.me'
+    # password = 'J%*ymb9x48%cXTK6mBMzU7#t'
+    # response = gpt_generator._change_post_data(post_id, data, username, password)
+    # return response
+    wp_url = 'https://staging3.staging2.blockchainspost.com'
+    post_id = 570  # ID of the post to update
+    username = 'generator'
+    app_pass = 'hpqJ CoHf Vugg xSv7 MRyp ZD0L'
+    # Data you want to update
+    data = {
+        'title': 'New Post Title',
+        'content': 'Updated content here',
+        'meta': { '_yoast_wpseo_metadesc': 'New Yoast meta desc' }
+    }
+    return gpt_generator._change_post_data(wp_url, post_id, username, app_pass, data)
 
 if __name__ == '__main__':
     app.run()
