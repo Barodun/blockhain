@@ -32,7 +32,7 @@ def generate():
 def default():
     prompt = 'Translate this text to English. There is the text:'
     content = 'There is the simple text to translate'
-    api_key = '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'
+    api_key = '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'
     gpt_model = 'gpt-3.5-turbo'
     res = gpt_generator.generate_text(prompt, content, api_key, gpt_model)
     print(res)
